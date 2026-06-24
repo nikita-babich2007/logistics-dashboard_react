@@ -1,18 +1,27 @@
-import { useLoaderData, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { useLocation } from "../hooks/useLocation";
+import { useFavoritesStore } from "../store/favoritesStore";
 
 export default function LocationDetailsRoute() {
-    const location = useLoaderData();
+    const { id } = useParams();
+    const { data: location, isLoading, isError } = useLocation(id);
+    const { favoriteIds, toggleFavorite } = useFavoritesStore();
+
+    if (isLoading) return <div>Loading location...</div>;
+    if (isError) return <div>Error loading location details.</div>;
+
+    const isFavorite = favoriteIds.includes(id);
 
     return (
         <>
-            <h1>Location Details</h1>  
-            <Link to="/dashboard/map">Back to Map</Link>
-            <div>
-                <p><strong>Name:</strong> {location.name}</p>
-                <p><strong>Address:</strong> {location.address}</p>
-                <p><strong>Type:</strong> {location.type}</p>
-                <p><strong>Rating:</strong> {location.rating}</p>
-            </div>
+            <Link to="/dashboard/map">← Back to Map</Link>
+            <h1>{location?.name}</h1>
+            <p>Address: {location?.address}</p>
+            <p>Type: {location?.type}</p>
+
+            <button onClick={() => toggleFavorite(id)}>
+                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+            </button>
         </>
     );
 }
