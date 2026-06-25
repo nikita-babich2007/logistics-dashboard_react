@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { useLocations } from "../hooks/useLocations";
+import { useLocations } from "../../hooks/useLocations";
 
-export default function TopLocationsBarChart() {
+export const TopLocationsBarChart = () => {
   const { data: locations = [] } = useLocations();
   const sortedData = [...locations].sort((a, b) => b.shipments - a.shipments).slice(0, 5);
 
@@ -18,4 +18,4 @@ export default function TopLocationsBarChart() {
       </ResponsiveContainer>
     </div>
   );
-}
+};
