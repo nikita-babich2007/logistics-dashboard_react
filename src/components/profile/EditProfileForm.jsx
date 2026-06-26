@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { profileSchema } from "../../schemas/profileSchemas";
 import { useAuthStore } from "../../store/authStore";
 import { useUpdateProfile } from "../../hooks/useUpdateProfile";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Button";
 
 export const EditProfileForm = () => {
   const user = useAuthStore(state => state.user);

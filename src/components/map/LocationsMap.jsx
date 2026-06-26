@@ -1,29 +1,44 @@
-import { useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { MapBoundsHandler } from "./MapBoundsHandler";
+import { useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 
-export const LocationsMap = ({ locations, onVisibleChange }) => {
-  const [bounds, setBounds] = useState(null);
+const MapEvents = ({ locations, onVisibleChange }) => {
+  const map = useMapEvents({
+    moveend: () => updateVisible(),
+    zoomend: () => updateVisible(),
+  });
 
-  // Центр України за замовчуванням
-  const center = [48.3794, 31.1656]; 
+  const updateVisible = () => {
+    if (!map) return;
+    const bounds = map.getBounds();
+    const visible = locations.filter(loc =>
+      bounds.contains([loc.lat || 48.3794, loc.lng || 31.1656])
+    );
+    onVisibleChange(visible);
+  };
+
+  useEffect(() => {
+    updateVisible();
+  }, [locations, map]);
+
+  return null;
+};
+
+export const LocationsMap = ({ locations = [], onVisibleChange }) => {
+  const defaultCenter = [48.3794, 31.1656];
 
   return (
-    <div style={{ height: "500px", width: "100%" }}>
-      <MapContainer center={center} zoom={6} style={{ height: "100%", width: "100%" }}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <MapBoundsHandler setVisibleBounds={(b) => {
-            setBounds(b);
-            const visible = locations.filter(loc => b.contains([loc.lat, loc.lng]));
-            if(onVisibleChange) onVisibleChange(visible);
-        }} />
-        
-        {locations.map(loc => (
-          <Marker key={loc.id} position={[loc.lat, loc.lng]}>
-            <Popup>{loc.name}</Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    </div>
+    <MapContainer center={defaultCenter} zoom={6} className="h-full w-full z-0">
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <MapEvents locations={locations} onVisibleChange={onVisibleChange} />
+
+      {locations.map((loc) => (
+        <Marker key={loc.id} position={[loc.lat || defaultCenter[0], loc.lng || defaultCenter[1]]}>
+          <Popup>
+            <div className="font-semibold text-slate-900">{loc.name}</div>
+            <div className="text-xs text-slate-500">{loc.address}</div>
+          </Popup>
+        </Marker>
+      ))}
+    </MapContainer>
   );
 };

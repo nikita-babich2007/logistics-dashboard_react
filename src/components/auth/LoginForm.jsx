@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schemas/authSchemas";
 import { useLogin } from "../../hooks/useLogin";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Button";
 
 export const LoginForm = () => {
   const { mutate: login, isPending } = useLogin();

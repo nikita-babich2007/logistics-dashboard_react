@@ -1,21 +1,18 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { useLocations } from "../hooks/useLocations";
+import { EditProfileForm } from "../components/profile/EditProfileForm";
+import { ChangePasswordForm } from "../components/profile/ChangePasswordForm";
 
-export default function TopLocationsBarChart() {
-  const { data: locations = [] } = useLocations();
-  const sortedData = [...locations].sort((a, b) => b.shipments - a.shipments).slice(0, 5);
-
+export const ProfileRoute = () => {
   return (
-    <div className="h-80 w-full mt-8">
-      <h3 className="mb-4">Top locations by shipments</h3>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={sortedData} layout="vertical">
-          <XAxis type="number" />
-          <YAxis dataKey="name" type="category" width={150} />
-          <Tooltip />
-          <Bar dataKey="shipments" fill="#3b82f6" />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="mx-auto max-w-2xl space-y-8">
+      <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
+      
+      <div className="rounded-xl border bg-white p-6 shadow-sm">
+        <EditProfileForm />
+      </div>
+      
+      <div className="rounded-xl border bg-white p-6 shadow-sm">
+        <ChangePasswordForm />
+      </div>
     </div>
   );
-}
+};

@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { changePasswordSchema } from "../../schemas/profileSchemas";
 import { useAuthStore } from "../../store/authStore";
 import { useChangePassword } from "../../hooks/useChangePassword";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Button";
 
 export const ChangePasswordForm = () => {
   const user = useAuthStore((state) => state.user);

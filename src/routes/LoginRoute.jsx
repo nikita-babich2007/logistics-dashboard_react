@@ -1,25 +1,17 @@
-import { useState } from "react";
-import { useLogin } from "../hooks/useLogin";
 import { Link } from "react-router-dom";
+import { LoginForm } from "../components/auth/LoginForm";
 
-export default function LoginRoute() {
-  const [email, setEmail] = useState("");
-  const { mutate: login, isPending, isError } = useLogin();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    login({ email });
-  };
-
+export const LoginRoute = () => {
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email (from mockapi)" value={email} onChange={e => setEmail(e.target.value)} required />
-        <button type="submit" disabled={isPending}>{isPending ? "Loading..." : "Sign in"}</button>
-      </form>
-      {isError && <p style={{color: "red"}}>Login failed</p>}
-      <p>Don't have an account? <Link to="/register">Sign up</Link></p>
+    <div className="w-full max-w-md">
+      <h1 className="mb-6 text-3xl font-bold text-slate-900">Login</h1>
+      <LoginForm />
+      <p className="mt-6 text-center text-sm text-slate-600">
+        Don't have an account?{" "}
+        <Link to="/register" className="font-semibold text-blue-600 hover:underline">
+          Sign up
+        </Link>
+      </p>
     </div>
   );
-}
+};
